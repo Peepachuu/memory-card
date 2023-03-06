@@ -2,33 +2,54 @@ import React from "react";
 import Card from "./Card";
 
 function Cards() {
-    const pokemonNames = [
-        "charmander", "charmeleon", "charizard", 
-        "bulbasaur", "ivysaur", "venusaur",
-        "squirtle", "wartortle", "blastoise",
-        "caterpie", "metapod", "butterfree"
-    ];
-
     const [pokemonData, setPokemonData] = React.useState([]);
-    function fetchPokemonData() {
-        pokemonNames.map(name =>
-            fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-            .then(res => res.json())
-            .then(data => {
-                setPokemonData(prevValue => prevValue.concat(
-                    {
-                        image: data.sprites.front_default, 
-                        id:name
-                    }
-                ));
-            })
-        );
+    React.useEffect(() => {
+        async function fetchPokemonData() {
+            const responses = [];
+            for (let id = 1; id <= 12; ++id) {
+                responses.push(fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+                .then(res => res.json()));
+            }
+            const data = await Promise.all(responses);
+            return data.map(pokemon => ({
+                image: pokemon.sprites.front_default,
+                id: pokemon.id,
+                name: pokemon.name,
+                clicked: false
+            }));
+        }
+        fetchPokemonData().then(data => setPokemonData(data));
+    }, []);
+
+    function handleClick(cardID) {
+        let pokemonDataCopy = JSON.parse(JSON.stringify(pokemonData));
+        shuffleArray(pokemonDataCopy);
+        for (const pokemon of pokemonDataCopy) {
+            if (pokemon.id === cardID) {
+                if (pokemon.clicked) {
+                    console.log("Already clicked");
+                }
+                pokemon.clicked = true;
+            }
+        }
+        setPokemonData(pokemonDataCopy);
     }
-    React.useEffect(() => fetchPokemonData(), []);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
 
     return (
         <section className="cards">
-            {pokemonData.map(data => <Card image={data.image} key={data.id} name={data.id}/>)}
+            {pokemonData.map(pokemon => <Card 
+                                        image={pokemon.image} 
+                                        key={pokemon.id} 
+                                        name={pokemon.name}
+                                        handleClick={() => handleClick(pokemon.id)}
+                                    />)}
         </section>
     )
 }

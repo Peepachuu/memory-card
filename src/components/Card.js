@@ -2,9 +2,9 @@ import React from "react";
 
 function Card(props) {
     return (
-        <div className="card">
+        <div className="card" onClick={props.handleClick}>
             <img src={props.image} alt={props.name}/>
-            <span>{props.name}</span>
+            <div>{props.name}</div>
         </div>
     )
 }
