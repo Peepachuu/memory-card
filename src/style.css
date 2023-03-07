@@ -7,3 +7,7 @@ img {
     width: 300px;
     height: auto;
 }
+
+.card {
+    border: 2px solid red;
+}

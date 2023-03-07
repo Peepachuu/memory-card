@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "./Card";
 
-function Cards() {
+function Cards(props) {
     const [pokemonData, setPokemonData] = React.useState([]);
     React.useEffect(() => {
         async function fetchPokemonData() {
@@ -30,6 +30,11 @@ function Cards() {
                     console.log("Already clicked");
                 }
                 pokemon.clicked = true;
+                props.setCurrentScore(prevScore => {
+                    props.setBestScore(prevBestScore => Math.max(prevBestScore, prevScore + 1));
+                    return prevScore + 1;
+                });
+                
             }
         }
         setPokemonData(pokemonDataCopy);
@@ -44,12 +49,13 @@ function Cards() {
 
     return (
         <section className="cards">
-            {pokemonData.map(pokemon => <Card 
-                                        image={pokemon.image} 
-                                        key={pokemon.id} 
-                                        name={pokemon.name}
-                                        handleClick={() => handleClick(pokemon.id)}
-                                    />)}
+            {pokemonData.map(pokemon => 
+                <Card 
+                    image={pokemon.image} 
+                    key={pokemon.id} 
+                    name={pokemon.name}
+                    handleClick={() => handleClick(pokemon.id)}
+                />)}
         </section>
     )
 }
