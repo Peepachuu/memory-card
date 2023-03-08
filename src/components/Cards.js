@@ -27,7 +27,8 @@ function Cards(props) {
         for (const pokemon of pokemonDataCopy) {
             if (pokemon.id === cardID) {
                 if (pokemon.clicked) {
-                    console.log("Already clicked");
+                    resetGame();
+                    return ;
                 }
                 pokemon.clicked = true;
                 props.setCurrentScore(prevScore => {
@@ -45,6 +46,16 @@ function Cards(props) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+    }
+
+    function resetGame() {
+        props.setCurrentScore(0);
+        let pokemonDataCopy = JSON.parse(JSON.stringify(pokemonData));
+        shuffleArray(pokemonDataCopy);
+        for (const pokemon of pokemonDataCopy) {
+            pokemon.clicked = false;
+        }
+        setPokemonData(pokemonDataCopy);
     }
 
     return (

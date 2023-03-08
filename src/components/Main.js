@@ -8,8 +8,8 @@ function Main() {
 
     return (
         <section className="main">
-            <Cards setCurrentScore={setCurrentScore} setBestScore={setBestScore}/>
             <Scores currentScore={currentScore} bestScore={bestScore}/>
+            <Cards setCurrentScore={setCurrentScore} setBestScore={setBestScore}/>
         </section>
     )
 }
