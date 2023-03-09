@@ -7,7 +7,7 @@ import "./style.css";
 function App() {
     
     return (
-        <section>
+        <section className="content">
             <Header/>
             <Main/>
             <Footer/>
