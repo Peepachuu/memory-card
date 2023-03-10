@@ -18,7 +18,10 @@ function Cards(props) {
                 clicked: false
             }));
         }
-        fetchPokemonData().then(data => setPokemonData(data));
+        fetchPokemonData().then(data => {
+            shuffleArray(data);
+            setPokemonData(data)
+        });
     }, []);
 
     function handleClick(cardID) {
